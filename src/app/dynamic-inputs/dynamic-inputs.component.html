@@ -1,0 +1,152 @@
+<div class="container">
+
+  <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+    <div class="align-items-center">
+      <div class="card">
+        <div class="card-header bg-info text-white">
+          <h3 class="card-title">Nested Dynamic Array</h3>
+        </div>
+
+        <div class="card-body">
+
+          <div class="form-group row" [ngClass]="{'has-error': formErrors.fullName}">
+            <label for="fullName" class="col-sm-2 col-form-label">Full Name</label>
+            <div class="col-sm-8">
+              <input type="text" id="fullName" formControlName="fullName" class="form-control">
+              <div class="invalid-feedback" *ngIf="formErrors.fullName">
+                {{formErrors.fullName}}
+              </div>
+            </div>
+          </div>
+
+          <div formGroupName="emailGroup">
+
+            <div class="form-group row" [ngClass]="{'has-error': formErrors.email}">
+              <label for="email" class="col-sm-2 col-form-label">Email</label>
+              <div class="col-sm-8">
+                <input type="email" id="email" formControlName="email" class="form-control">
+              </div>
+              <div class="invalid-tooltip" *ngIf="formErrors.email">
+                {{formErrors.email}}
+              </div>
+            </div>
+
+            <div class="form-group row" [ngClass]="{'has-error': formErrors.confirmEmail}">
+              <label for="confirmEmail" class="col-sm-2 col-form-label">Confirm Email</label>
+              <div class="col-sm-8">
+                <input type="email" id="confirmEmail" formControlName="confirmEmail" class="form-control">
+              </div>
+              <div class="invalid-tooltip" *ngIf="formErrors.confirmEmail">
+                {{formErrors.confirmEmail}}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row" [ngClass]="{'has-error': formErrors.phone}">
+            <label for="phone" class="col-sm-2 col-form-label">Phone</label>
+            <div class="col-sm-8">
+              <input type="text" id="phone" formControlName="phone" class="form-control">
+            </div>
+            <div class="invalid-tooltip" *ngIf="formErrors.phone">
+              {{formErrors.phone}}
+            </div>
+          </div>
+
+        </div>
+
+        <div class="container">
+          <div class="form-group row">
+            <div class="col-md-4">
+              <button type="button" class="btn btn-info" (click)="addSkillButtonClick()">
+                Add Skills
+              </button>
+            </div>
+          </div>
+
+          <div formArrayName="skills" *ngFor="let skill of studentForm.get('skills').controls; let i = index">
+            <div [formGroupName]="i">
+
+              <div class="form-group row"
+                   [ngClass]="{'has-error': skill.get('skillName').invalid && skill.get('skillName').touched }">
+                <label [attr.for]="'skillName' + i" class="col-sm-2 col-form-label">Skill</label>
+                <div class="col-sm-8">
+                  <input type="text" [id]="'skillName' + i" formControlName="skillName" (blur)="logValidationErrors()"
+                         class="form-control">
+                </div>
+                <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                      *ngIf="skill.get('skillName').errors?.required &&
+                              skill.get('skillName').touched">
+                 Skill name is required!
+                </span>
+              </div>
+
+              <div class="form-group row"
+                   [ngClass]="{'has-error': skill.get('experienceInYears').invalid && skill.get('experienceInYears').touched }">
+                <label [attr.for]="'experienceInYears' + i"
+                       class="col-sm-2 col-form-label">Experience</label>
+                <div class="col-sm-8">
+                  <input type="text" [id]="'experienceInYears' + i"
+                         formControlName="experienceInYears"
+                         class="form-control">
+                </div>
+                <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                      *ngIf="skill.get('experienceInYears').errors?.required &&
+                              skill.get('experienceInYears').touched">
+                  Experience is required!
+                </span>
+              </div>
+
+              <div class="form-group row"
+                   [ngClass]="{'has-error': skill.get('proficiency').invalid && skill.get('proficiency').touched }">
+                <label class="col-sm-2 col-form-label">Proficiency</label>
+                <div class="form-check form-check-inline">
+
+                  <label class="form-check-label">
+                    <input class="form-check-input" type="radio"
+                           formControlName="proficiency"
+                           value="beginner">Beginner</label>
+                </div>
+                <div class="form-check form-check-inline">
+
+                  <label class="form-check-label">
+                    <input class="form-check-input" type="radio"
+                           formControlName="proficiency"
+                           value="intermediate">Intermediate</label>
+                </div>
+                <div class="form-check form-check-inline">
+
+                  <label class="form-check-label">
+                    <input class="form-check-input" type="radio"
+                           formControlName="proficiency"
+                           value="advance">Advance</label>
+                </div>
+                <span class="d-inline-block" tabindex="0"
+                      data-toggle="tooltip"
+                      *ngIf="skill.get('proficiency').errors?.required &&
+                              skill.get('proficiency').touched">
+                  Proficiency is required!
+                </span>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card-footer bg-info text-white">
+          <div class="col-sm-4 offset-sm-2">
+            <button type="submit" class="btn btn-outline-light">
+              Submit
+            </button>
+            <button type="button" class="btn btn-outline-light" (click)="onLoadDataClick()">
+              Load Data
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+
